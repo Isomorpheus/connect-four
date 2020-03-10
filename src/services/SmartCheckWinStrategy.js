@@ -53,15 +53,16 @@ const strategy = rows => {
     diagonal(descDiagonals(boardForPlayer1)) ||
     diagonal(descDiagonals(boardForPlayer2))
 
-  const ascDiagonals = matrix => comb(matrix)
+  const ascDiagonals = matrix => comb(matrix.reverse())
   const diagonalAsc = rows =>
-    (rows.some(threeConnections) ? 'diagonal desc' : '')
-    
+    rows.some(threeConnections) ? 'diagonal asc' : ''
   result =
-    diagonalAsc(ascDiagonals(boardForPlayer1) ||
-    diagonalAsc(ascDiagonals(boardForPlayer2)
- 
-switch (result) {
+    diagonalAsc(ascDiagonals(boardForPlayer1)) ||
+    diagonalAsc(ascDiagonals(boardForPlayer2))
+
+  console.log(diagonalAsc(ascDiagonals(boardForPlayer1)))
+
+  switch (result) {
     case 'horizontal':
       return 2
     case 'vertical':
