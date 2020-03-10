@@ -6,9 +6,19 @@
 export default {
   name: 'TheGame', // You just lost it
   components: {},
-  data: () => ({}),
   props: {
     winCheckStrategy: Function
+  },
+  data: () => ({}),
+  mounted() {
+    this.winCheckStrategy([
+      [0, 0, 0, 1, 0, 0, 0],
+      [0, 0, 0, 1, 1, 1, 2],
+      [0, 1, 1, 1, 0, 1, 1],
+      [0, 2, 2, 1, 1, 0, 1],
+      [0, 0, 2, 0, 0, 0, 1],
+      [0, 0, 1, 1, 1, 1, 0]
+    ])
   },
   methods: {
     doWeHaveAWinner() {
