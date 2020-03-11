@@ -46,10 +46,12 @@ export default {
       console.log(c)
       this.PICK_TILE(c)
       //send new board to winnings
-      this.winCheckStrategy(this.board)
+      // this.winCheckStrategy(this.board)
+      this.doWeHaveAWinner()
     },
     doWeHaveAWinner() {
-      const winner = 0 // this.winCheckStrategy(rows)
+      const winner = this.winCheckStrategy(this.board)
+
       if (winner > 0) {
         this.$emit('win', { player: winner })
       }

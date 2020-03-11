@@ -1,10 +1,16 @@
 <template>
   <div id="app">
-    <TheGame :win-check-strategy="SmartCheckWinStrategy" />
+    <div v-if="gameState === 'game over'"><h1>GameOver</h1></div>
+    <TheGame
+      :win-check-strategy="SmartCheckWinStrategy"
+      @win="setGameStatetoWin"
+    />
   </div>
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
+import types from '@/store/typings'
 import TheGame from './components/TheGame.vue'
 import { SmartCheckWinStrategy } from './services'
 
@@ -13,9 +19,19 @@ export default {
   components: {
     TheGame
   },
-  data: () => ({}),
+  data: () => ({
+    gameActive: false
+  }),
   computed: {
+    ...mapState(['gameState']),
     SmartCheckWinStrategy: () => SmartCheckWinStrategy
+  },
+  methods: {
+    ...mapActions([types.SET_GAMESTATE_TO_WIN]),
+    setGameStatetoWin(e) {
+      this.SET_GAMESTATE_TO_WIN(e)
+      console.log('setGameStatetoWin', e)
+    }
   }
 }
 </script>

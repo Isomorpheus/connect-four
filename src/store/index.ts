@@ -13,7 +13,8 @@ console.log(gRows, matrix)
 export default new Vuex.Store({
   state: {
     board: matrix(6, 7),
-    activePlayer: 1
+    activePlayer: 1,
+    gameState: 'play'
   },
   mutations: {
     [types.SET_BOARD](state, payload) {
@@ -21,6 +22,9 @@ export default new Vuex.Store({
     },
     [types.TOGGLE_ACTIVE_PLAYER](state, payload) {
       Vue.set(state, 'activePlayer', payload)
+    },
+    [types.SET_GAMESTATE] (state, payload) {
+      Vue.set(state, 'gameState', payload)
     }
   },
   actions: {
@@ -40,6 +44,10 @@ export default new Vuex.Store({
       let updatedBoard = replaceAt([...currentBoard], payload, updatedColumn)
       commit(types.SET_BOARD, transpose(updatedBoard))
       commit(types.TOGGLE_ACTIVE_PLAYER, state.activePlayer === 1 ? 2 : 1 )
+    },
+    [types.SET_GAMESTATE_TO_WIN]({state, commit}, {player}) {
+      commit(types.SET_GAMESTATE, 'game over')
+      console.log(player)
     }
   },
   modules: {}
