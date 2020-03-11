@@ -9,9 +9,7 @@ const strategy = rows => {
   const boardForPlayer1 = rows.map(row => transformRow(1)(row))
   const boardForPlayer2 = rows.map(row => transformRow(2)(row))
 
-  const boardForPlayer = p => rows.map(row => transformRow(p)(row))
-
-  // generic check for n or more connections
+  // generic predicate to check for n or more connections
   const checkConnections = n => inputArray =>
     inputArray.reduce((connections, curr, i, array) => {
       const item = array[i + 1]
@@ -28,7 +26,6 @@ const strategy = rows => {
   const testOnWinner = rows => rows.some(threeConnections)
 
   // diagonals for testing on winners
-
   const diagonals = matrix =>
     matrix[0].map((col, i) =>
       matrix.map((row, ri) => (row[i + ri] ? row[i + ri] : '-'))
@@ -40,17 +37,12 @@ const strategy = rows => {
     return diaOne.concat(diaTwo)
   }
 
-  // check for diagonal winners descending
-  const descDiagonals = matrix => allDiagonals(matrix)
-  // check for diagonal winners ascending
-  const ascDiagonals = matrix => allDiagonals(matrix.reverse())
-
-  // result
-  function result() {
-    if (testOnWinner(boardForPlayer(1)) || testOnWinner(boardForPlayer(2))) {
+  // results
+  function results() {
+    if (testOnWinner(boardForPlayer1) || testOnWinner(boardForPlayer2)) {
       return 'horizontal'
     }
-    // transpose columns to rows
+    // transpose columns to rows for checking on vertical winners
     if (
       testOnWinner(transpose(boardForPlayer1)) ||
       testOnWinner(transpose(boardForPlayer2))
@@ -58,20 +50,21 @@ const strategy = rows => {
       return 'vertical'
     }
     if (
-      testOnWinner(descDiagonals(boardForPlayer1)) ||
-      testOnWinner(descDiagonals(boardForPlayer2))
-    ) {
-      return 'diagonal desc'
-    }
-    if (
-      testOnWinner(ascDiagonals(boardForPlayer1)) ||
-      testOnWinner(ascDiagonals(boardForPlayer2))
+      testOnWinner(allDiagonals(boardForPlayer1)) ||
+      testOnWinner(allDiagonals(boardForPlayer2))
     ) {
       return 'diagonal asc'
     }
+    if (
+      testOnWinner(allDiagonals(boardForPlayer1.reverse())) ||
+      testOnWinner(allDiagonals(boardForPlayer2.reverse()))
+    ) {
+      return 'diagonal desc'
+    }
+    return 'none'
   }
-  console.log(result())
-  switch (result()) {
+  console.log('results', results())
+  switch (results()) {
     case 'horizontal':
       return 2
     case 'vertical':

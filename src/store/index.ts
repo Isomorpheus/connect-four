@@ -12,14 +12,15 @@ console.log(gRows, matrix)
 
 export default new Vuex.Store({
   state: {
-    board: matrix(6, 7)
+    board: matrix(6, 7),
+    activePlayer: 1
   },
   mutations: {
     [types.SET_BOARD](state, payload) {
-      console.log('mutation', payload)
-
       Vue.set(state, 'board', payload)
-      // object with playerid and update column
+    },
+    [types.TOGGLE_ACTIVE_PLAYER](state, payload) {
+      Vue.set(state, 'activePlayer', payload)
     }
   },
   actions: {
@@ -33,11 +34,12 @@ export default new Vuex.Store({
       console.log(currentBoard[payload], getIndex)
 
       // put player id
-      let updatedColumn = replaceAt(currentBoard[payload], getIndex, 1)
+      let updatedColumn = replaceAt(currentBoard[payload], getIndex, state.activePlayer)
 
       // update board in store
       let updatedBoard = replaceAt([...currentBoard], payload, updatedColumn)
       commit(types.SET_BOARD, transpose(updatedBoard))
+      commit(types.TOGGLE_ACTIVE_PLAYER, state.activePlayer === 1 ? 2 : 1 )
     }
   },
   modules: {}

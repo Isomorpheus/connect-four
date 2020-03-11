@@ -1,12 +1,17 @@
 <template>
   <div class="grid">
-    <div v-for="(column, i) in transposed" :key="'r' + i" class="boardColumn">
+    <div
+      v-for="(column, i) in transposedBoard"
+      :key="'r' + i"
+      class="boardColumn"
+    >
       <div class="cell topCell" @click="onClickCell(`${i}`)">c {{ i }}</div>
 
       <div
         v-for="(cell, ic) in column.reverse()"
         :key="'c' + ic"
         class="cell"
+        :class="`color_${cell}`"
         @click="onClickCell(`${i}`)"
       >
         {{ cell }}
@@ -20,7 +25,7 @@ import { mapState, mapActions } from 'vuex'
 import { transpose } from '../services/utils'
 import types from '../store/typings'
 export default {
-  name: 'TheGame', // You just lost it
+  name: 'TheGame',
   components: {},
   props: {
     winCheckStrategy: {
@@ -31,19 +36,9 @@ export default {
   data: () => ({}),
   computed: {
     ...mapState(['board']),
-    transposed() {
+    transposedBoard() {
       return transpose(this.board)
     }
-  },
-  mounted() {
-    this.winCheckStrategy([
-      [0, 0, 0, 1, 0, 0, 0],
-      [0, 0, 0, 1, 1, 1, 2],
-      [0, 1, 1, 1, 0, 1, 1],
-      [0, 2, 2, 1, 1, 0, 1],
-      [0, 0, 2, 0, 0, 0, 1],
-      [0, 0, 1, 1, 1, 1, 0]
-    ])
   },
   methods: {
     ...mapActions([types.PICK_TILE]),
@@ -94,8 +89,14 @@ export default {
         }
       }
       &.topCell:hover ~ .cell {
-        background: #f0f;
+        background: #ddd;
       }
+    }
+    .color_1 {
+      background: rgb(23, 157, 247);
+    }
+    .color_2 {
+      background: rgb(240, 220, 67);
     }
   }
 }
