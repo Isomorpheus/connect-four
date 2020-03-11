@@ -1,68 +1,77 @@
 const strategy = rows => {
-  // set players
-  const players = [1, 2]
-  // transformed row for generic check
-  const transformedRow = player => trRow =>
+  // transforms row for generic check per player
+  const transformRow = player => trRow =>
     trRow.map(p => (p === player ? 'x' : '-'))
 
-  const boardForPlayer1 = rows.map(row => transformedRow(1)(row))
+  // player boards
+  const boardForPlayer1 = rows.map(row => transformRow(1)(row))
+  const boardForPlayer2 = rows.map(row => transformRow(2)(row))
 
-  const boardForPlayer2 = rows.map(row => transformedRow(2)(row))
+  const boardForPlayer = p => rows.map(row => transformRow(p)(row))
 
-  // check for n connections
-  const checkConnections = n => arr =>
-    arr.reduce((acc, curr, i, array) => {
+  // generic check for n or more connections
+  const checkConnections = n => inputArray =>
+    inputArray.reduce((connections, curr, i, array) => {
       const item = array[i + 1]
       if (item === 'x' && curr === 'x') {
-        acc = acc + 1
+        connections = connections + 1
       }
-      return acc
+      return connections
     }, 0) >= n
 
-  // partial for 3 or more connections
+  // partial function for specific testing on 3 or more connections
   const threeConnections = checkConnections(3)
 
-  // check for horizontal winners
-  const testPlayers = rows => (rows.some(threeConnections) ? 'horizontal' : '')
-  let result = testPlayers(boardForPlayer1) || testPlayers(boardForPlayer2)
+  // check for winners: if there are 3 or more connections
+  const testOnWinner = rows => rows.some(threeConnections)
 
-  // check for vertical winners
-  // transpose cols to rows
+  // transpose columns to rows
   const transpose = array => array[0].map((col, i) => array.map(row => row[i]))
-  const vertical = rows => (rows.some(threeConnections) ? 'vertical' : '')
 
-  result =
-    vertical(transpose(boardForPlayer1)) || vertical(transpose(boardForPlayer2))
-
-  // check for diagonal winners descending
+  // diagonals for testing on winners
 
   const diagonals = matrix =>
     matrix[0].map((col, i) =>
       matrix.map((row, ri) => (row[i + ri] ? row[i + ri] : '-'))
     )
 
-  const comb = matrix => {
+  const allDiagonals = matrix => {
     const diaOne = diagonals(matrix).slice(0, 4)
     const diaTwo = diagonals(transpose(matrix)).slice(1, 3)
     return diaOne.concat(diaTwo)
   }
 
-  const descDiagonals = matrix => comb(matrix)
-  const diagonal = rows => (rows.some(threeConnections) ? 'diagonal desc' : '')
-  result =
-    diagonal(descDiagonals(boardForPlayer1)) ||
-    diagonal(descDiagonals(boardForPlayer2))
+  // check for diagonal winners descending
+  const descDiagonals = matrix => allDiagonals(matrix)
+  // check for diagonal winners ascending
+  const ascDiagonals = matrix => allDiagonals(matrix.reverse())
 
-  const ascDiagonals = matrix => comb(matrix.reverse())
-  const diagonalAsc = rows =>
-    rows.some(threeConnections) ? 'diagonal asc' : ''
-  result =
-    diagonalAsc(ascDiagonals(boardForPlayer1)) ||
-    diagonalAsc(ascDiagonals(boardForPlayer2))
+  // result
+  function result() {
+    if (testOnWinner(boardForPlayer(1)) || testOnWinner(boardForPlayer(2))) {
+      return 'horizontal'
+    }
+    if (
+      testOnWinner(transpose(boardForPlayer1)) ||
+      testOnWinner(transpose(boardForPlayer2))
+    ) {
+      return 'vertical'
+    }
+    if (
+      testOnWinner(descDiagonals(boardForPlayer1)) ||
+      testOnWinner(descDiagonals(boardForPlayer2))
+    ) {
+      return 'diagonal desc'
+    }
+    if (
+      testOnWinner(ascDiagonals(boardForPlayer1)) ||
+      testOnWinner(ascDiagonals(boardForPlayer2))
+    ) {
+      return 'diagonal asc'
+    }
+  }
 
-  console.log(diagonalAsc(ascDiagonals(boardForPlayer1)))
-
-  switch (result) {
+  switch (result()) {
     case 'horizontal':
       return 2
     case 'vertical':

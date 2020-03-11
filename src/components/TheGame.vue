@@ -1,15 +1,23 @@
 <template>
-  <div class="grid"></div>
+  <div class="grid">
+  </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'TheGame', // You just lost it
   components: {},
   props: {
-    winCheckStrategy: Function
+    winCheckStrategy: {
+      type: Function,
+      required: true
+    }
   },
   data: () => ({}),
+  computed: {
+    ...mapState(['board'])
+  },
   mounted() {
     this.winCheckStrategy([
       [0, 0, 0, 1, 0, 0, 0],
@@ -21,6 +29,9 @@ export default {
     ])
   },
   methods: {
+    topRow(c) {
+      console.log(c)
+    },
     doWeHaveAWinner() {
       const winner = 0 // this.winCheckStrategy(rows)
       if (winner > 0) {
