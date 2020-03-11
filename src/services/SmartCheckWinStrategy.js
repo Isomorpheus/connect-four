@@ -1,3 +1,5 @@
+import { transpose } from '../services/utils'
+
 const strategy = rows => {
   // transforms row for generic check per player
   const transformRow = player => trRow =>
@@ -25,9 +27,6 @@ const strategy = rows => {
   // check for winners: if there are 3 or more connections
   const testOnWinner = rows => rows.some(threeConnections)
 
-  // transpose columns to rows
-  const transpose = array => array[0].map((col, i) => array.map(row => row[i]))
-
   // diagonals for testing on winners
 
   const diagonals = matrix =>
@@ -51,6 +50,7 @@ const strategy = rows => {
     if (testOnWinner(boardForPlayer(1)) || testOnWinner(boardForPlayer(2))) {
       return 'horizontal'
     }
+    // transpose columns to rows
     if (
       testOnWinner(transpose(boardForPlayer1)) ||
       testOnWinner(transpose(boardForPlayer2))
@@ -70,7 +70,7 @@ const strategy = rows => {
       return 'diagonal asc'
     }
   }
-
+  console.log(result())
   switch (result()) {
     case 'horizontal':
       return 2

@@ -1,21 +1,16 @@
 <template>
   <div id="app">
-    <img alt="Aon" src="./assets/logo.png" />
-    <HelloWorld msg="Enjoy the exercise!" />
-
     <TheGame :win-check-strategy="SmartCheckWinStrategy" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 import TheGame from './components/TheGame.vue'
 import { SmartCheckWinStrategy } from './services'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
     TheGame
   },
   data: () => ({}),
