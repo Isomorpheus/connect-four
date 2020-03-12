@@ -35,7 +35,7 @@ export default {
   },
   data: () => ({}),
   computed: {
-    ...mapState(['board']),
+    ...mapState(['board', 'gameState', 'activePlayer']),
     transposedBoard() {
       return transpose(this.board)
     }
@@ -43,11 +43,12 @@ export default {
   methods: {
     ...mapActions([types.PICK_TILE]),
     onClickCell(c) {
-      console.log(c)
-      this.PICK_TILE(c)
-      //send new board to winnings
-      // this.winCheckStrategy(this.board)
-      this.doWeHaveAWinner()
+      if (this.gameState === 'play' /** && this.activePlayer === 1 */) {
+        this.PICK_TILE(c)
+        //send new board to winnings
+        // this.winCheckStrategy(this.board)
+        this.doWeHaveAWinner()
+      }
     },
     doWeHaveAWinner() {
       const winner = this.winCheckStrategy(this.board)
@@ -66,12 +67,8 @@ export default {
   padding-top: 1rem; // space for indicator
   position: relative;
   display: grid;
-  grid-template-areas:
-    'header header header'
-    'left main right'
-    'footer footer footer';
   grid-template-rows: auto 1fr 1fr 1fr 1fr 1fr 1fr 1fr auto;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: auto 1fr 1fr 1fr 1fr 1fr 1fr 1fr auto;
 
   .boardColumn {
     .cell {
