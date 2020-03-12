@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <div v-if="gameState === 'game over'"><h1>GameOver</h1></div>
+    <div v-if="gameState === 'game over'">
+      <h1>GameOver player {{ winner }} wins</h1>
+    </div>
     <TheGame
       :win-check-strategy="SmartCheckWinStrategy"
       @win="setGameStatetoWin"
@@ -20,7 +22,8 @@ export default {
     TheGame
   },
   data: () => ({
-    gameActive: false
+    gameActive: false,
+    winner: ''
   }),
   computed: {
     ...mapState(['gameState']),
@@ -31,6 +34,7 @@ export default {
     setGameStatetoWin(e) {
       this.SET_GAMESTATE_TO_WIN(e)
       console.log('setGameStatetoWin', e)
+      this.winner = e.player
     }
   }
 }

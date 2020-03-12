@@ -35,19 +35,26 @@ export default {
   },
   data: () => ({}),
   computed: {
-    ...mapState(['board', 'gameState', 'activePlayer']),
+    ...mapState(['isLoading', 'board', 'gameState', 'activePlayer']),
     transposedBoard() {
       return transpose(this.board)
+    }
+  },
+  watch: {
+    transposedBoard(tp) {
+      console.log('change', tp)
+      this.doWeHaveAWinner()
     }
   },
   methods: {
     ...mapActions([types.PICK_TILE]),
     onClickCell(c) {
-      if (this.gameState === 'play' /** && this.activePlayer === 1 */) {
+      if (
+        this.gameState === 'play' &&
+        this.activePlayer === 1 &&
+        !this.isLoading
+      ) {
         this.PICK_TILE(c)
-        //send new board to winnings
-        // this.winCheckStrategy(this.board)
-        this.doWeHaveAWinner()
       }
     },
     doWeHaveAWinner() {
@@ -89,6 +96,13 @@ export default {
       }
       &.topCell:hover ~ .cell {
         background: #ddd;
+
+        &.color_1 {
+          background: rgba(23, 157, 247, 0.5);
+        }
+        &.color_2 {
+          background: rgba(240, 220, 67, 0.5);
+        }
       }
     }
     .color_1 {
