@@ -1,11 +1,12 @@
 <template>
   <div class="grid">
+    <div></div>
     <div
       v-for="(column, i) in transposedBoard"
       :key="'r' + i"
       class="boardColumn"
     >
-      <div class="cell topCell" @click="onClickCell(`${i}`)">c {{ i }}</div>
+      <div class="cell topCell" :class="`tc_${activePlayer}`" @click="onClickCell(`${i}`)">c {{ i }}</div>
 
       <div
         v-for="(cell, ic) in column.reverse()"
@@ -14,7 +15,7 @@
         :class="`color_${cell}`"
         @click="onClickCell(`${i}`)"
       >
-        {{ cell }}
+        {{ `${i}${ic}` }}
       </div>
     </div>
   </div>
@@ -68,21 +69,22 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .grid {
   margin: 2rem auto;
   padding-top: 1rem; // space for indicator
   position: relative;
   display: grid;
-  grid-template-rows: auto 1fr 1fr 1fr 1fr 1fr 1fr 1fr auto;
-  grid-template-columns: auto 1fr 1fr 1fr 1fr 1fr 1fr 1fr auto;
+  grid-template-rows: auto repeat(7, 150px) auto;
+  grid-template-columns: auto repeat(6, 150px) auto;
 
   .boardColumn {
     .cell {
       display: flex;
       background: #eee;
-      width: 100%;
-      height: 100px;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
       align-items: center;
       justify-content: center;
       &:hover {
@@ -91,24 +93,30 @@ export default {
       &.topCell {
         background: #fff;
         &:hover {
-          background: #ddd;
+          border-radius: 50%;
+        background: rgba(23, 157, 247, 0.5);
+
         }
       }
       &.topCell:hover ~ .cell {
         background: #ddd;
 
         &.color_1 {
+          border-radius: 50%;
           background: rgba(23, 157, 247, 0.5);
         }
         &.color_2 {
+          border-radius: 50%;
           background: rgba(240, 220, 67, 0.5);
         }
       }
     }
     .color_1 {
+      border-radius: 50%;
       background: rgb(23, 157, 247);
     }
     .color_2 {
+      border-radius: 50%;
       background: rgb(240, 220, 67);
     }
   }
