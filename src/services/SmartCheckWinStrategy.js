@@ -1,13 +1,14 @@
 import { transpose } from '../services/utils'
 
+const players = [1, 2]
+
 const strategy = rows => {
-  // transforms row for generic check per player
+  // transforms a row in the matrix, for generic check per player
   const transformRow = player => trRow =>
     trRow.map(p => (p === player ? 'x' : '-'))
 
-  // player boards
-  const boardForPlayer1 = rows.map(row => transformRow(1)(row))
-  const boardForPlayer2 = rows.map(row => transformRow(2)(row))
+  // playerboard per player
+  const boardForPlayer = p => rows.map(row => transformRow(p)(row))
 
   // generic predicate to check for n or more connections
   const checkConnections = n => inputArray =>
@@ -32,50 +33,39 @@ const strategy = rows => {
     )
 
   const allDiagonals = matrix => {
-    const diaOne = diagonals(matrix).slice(0, 4)
-    const diaTwo = diagonals(transpose(matrix)).slice(1, 3)
-    return diaOne.concat(diaTwo)
+    const diagonalsStartingInTopRow = diagonals(matrix).slice(0, 4)
+    const diaonalsStartingAtFirstColumn = diagonals(transpose(matrix)).slice(
+      1,
+      3
+    )
+    return diagonalsStartingInTopRow.concat(diaonalsStartingAtFirstColumn)
   }
 
-  // results
-  function results() {
-    if (testOnWinner(boardForPlayer1) || testOnWinner(boardForPlayer2)) {
-      return 'horizontal'
+  // boardchecker for winning combinations per player
+  function playerResults(player) {
+    // check on horizontals
+    if (testOnWinner(boardForPlayer(player))) {
+      return player
     }
     // transpose columns to rows for checking on vertical winners
-    if (
-      testOnWinner(transpose(boardForPlayer1)) ||
-      testOnWinner(transpose(boardForPlayer2))
-    ) {
-      return 'vertical'
+    if (testOnWinner(transpose(boardForPlayer(player)))) {
+      return player
     }
-    if (
-      testOnWinner(allDiagonals(boardForPlayer1)) ||
-      testOnWinner(allDiagonals(boardForPlayer2))
-    ) {
-      return 'diagonal asc'
+    // check for diagonal winners (desecending)
+    if (testOnWinner(allDiagonals(boardForPlayer(player)))) {
+      return player
     }
-    if (
-      testOnWinner(allDiagonals(boardForPlayer1.reverse())) ||
-      testOnWinner(allDiagonals(boardForPlayer2.reverse()))
-    ) {
-      return 'diagonal desc'
+    // check for diagonal winners (asecending)
+    if (testOnWinner(allDiagonals(boardForPlayer(player).reverse()))) {
+      return player
     }
     return 'none'
   }
-  console.log('results', results())
-  switch (results()) {
-    case 'horizontal':
-      return 2
-    case 'vertical':
-      return 1
-    case 'diagonal asc':
-      return 2
-    case 'diagonal desc':
-      return 1
-    default:
-      return 0
-  }
+
+  const winner = players
+    .map(n => playerResults(n))
+    .find(r => typeof r === 'number')
+  return winner ? winner : 0
 }
 
 export default strategy
