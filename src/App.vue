@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <div v-if="gameState === 'game over'">
-      <h1>GameOver player {{ winner }} wins</h1>
+      <h1 v-if="winner">Game over player {{ winner }} wins</h1>
+      <h1 v-else-if="winner">Game over draw</h1>
     </div>
     <TheGame
       :win-check-strategy="SmartCheckWinStrategy"
@@ -23,30 +24,45 @@ export default {
   },
   data: () => ({
     gameActive: false,
-    winner: ''
+    winner: '',
+    color: {
+      1: 'rgb(0, 177, 242)',
+      2: '#fccf1a'
+    }
   }),
   computed: {
-    ...mapState(['gameState']),
+    ...mapState(['gameState', 'activePlayer']),
     SmartCheckWinStrategy: () => SmartCheckWinStrategy
+  },
+  watch: {
+    activePlayer() {
+      if (this.activePlayer !== '-' && !this.gameState.includes('game over')) {
+        this.$root.$el.style.setProperty(
+          '--primary',
+          this.color[this.activePlayer]
+        )
+      }
+    }
   },
   methods: {
     ...mapActions([types.SET_GAMESTATE_TO_WIN]),
-    setGameStatetoWin(e) {
-      this.SET_GAMESTATE_TO_WIN(e)
-      console.log('setGameStatetoWin', e)
-      this.winner = e.player
+    setGameStatetoWin(w) {
+      this.SET_GAMESTATE_TO_WIN(w)
+      this.winner = w.player
     }
   }
 }
 </script>
 
 <style lang="scss">
+:root {
+  --primary: rgb(0, 177, 242);
+  --secundary: #fccf1a;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  display: grid;
+  grid-template-rows: auto auto;
+  grid-template-columns: auto;
+  background: var(--pimary);
 }
 </style>

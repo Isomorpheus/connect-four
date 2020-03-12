@@ -1,21 +1,30 @@
 <template>
   <div class="grid">
-    <div></div>
     <div
       v-for="(column, i) in transposedBoard"
       :key="'r' + i"
       class="boardColumn"
+      :class="`col_${i}`"
     >
-      <div class="cell topCell" :class="`tc_${activePlayer}`" @click="onClickCell(`${i}`)">c {{ i }}</div>
+      <div
+        class="cell topCell  animated bounceInDown"
+        :class="`tc_${activePlayer}`"
+        @click="onClickCell(`${i}`)"
+      >
+        c {{ i }}
+      </div>
 
       <div
         v-for="(cell, ic) in column.reverse()"
+        ref="cell_ref"
         :key="'c' + ic"
         class="cell"
         :class="`color_${cell}`"
-        @click="onClickCell(`${i}`)"
+        @click="onClickCell(`${i}`, this)"
       >
-        {{ `${i}${ic}` }}
+        <div v-if="cell !== 0" class="test">
+          {{ `${i}${ic} ${cell}` }}
+        </div>
       </div>
     </div>
   </div>
@@ -23,6 +32,8 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import gsap from 'gsap'
+
 import { transpose } from '../services/utils'
 import types from '../store/typings'
 export default {
@@ -42,10 +53,26 @@ export default {
     }
   },
   watch: {
-    transposedBoard(tp) {
-      console.log('change', tp)
+    transposedBoard(o, n) {
+      console.log(o, n)
+
       this.doWeHaveAWinner()
     }
+  },
+  mounted() {
+    const collection = this.$refs.cell_ref
+
+    gsap.from(collection, {
+      duration: 0.85,
+      scale: 0.2,
+      opacity: 0,
+      stagger: {
+        amount: 0.5,
+        from: 'center',
+        ease: 'power.easout',
+        grid: [7, 6]
+      }
+    })
   },
   methods: {
     ...mapActions([types.PICK_TILE]),
@@ -56,6 +83,7 @@ export default {
         !this.isLoading
       ) {
         this.PICK_TILE(c)
+        this.aninmatedCol(c)
       }
     },
     doWeHaveAWinner() {
@@ -64,6 +92,23 @@ export default {
       if (winner > 0) {
         this.$emit('win', { player: winner })
       }
+    },
+    aninmatedCol(c) {
+      // look at what w have
+      console.log(this.transposedBoard[c])
+      // get dom elements
+      //const collection = this.$refs.cell_ref
+      const collection = document.querySelectorAll(`.col_${c} .cell`)
+      console.log(collection)
+      gsap.from(collection, {
+        duration: 1,
+        scale: 0.4,
+        borderRadius: '10%',
+        stagger: {
+          amount: 0.6,
+          from: 'start'
+        }
+      })
     }
   }
 }
@@ -75,8 +120,8 @@ export default {
   padding-top: 1rem; // space for indicator
   position: relative;
   display: grid;
-  grid-template-rows: auto repeat(7, 150px) auto;
-  grid-template-columns: auto repeat(6, 150px) auto;
+  grid-template-rows: repeat(7, 150px);
+  grid-template-columns: repeat(7, 150px);
 
   .boardColumn {
     .cell {
@@ -88,21 +133,20 @@ export default {
       align-items: center;
       justify-content: center;
       &:hover {
-        background: #ddd;
+        background: var(--primary);
       }
       &.topCell {
         background: #fff;
         &:hover {
           border-radius: 50%;
-        background: rgba(23, 157, 247, 0.5);
-
+          background: var(--primary);
         }
       }
       &.topCell:hover ~ .cell {
         background: #ddd;
 
         &.color_1 {
-          border-radius: 50%;
+          border-radius: 5%;
           background: rgba(23, 157, 247, 0.5);
         }
         &.color_2 {
@@ -112,13 +156,62 @@ export default {
       }
     }
     .color_1 {
-      border-radius: 50%;
+      border-radius: 5%;
       background: rgb(23, 157, 247);
     }
     .color_2 {
       border-radius: 50%;
       background: rgb(240, 220, 67);
     }
+  }
+  .animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+  }
+
+  @keyframes bounceInDown {
+    from,
+    60%,
+    75%,
+    90%,
+    to {
+      -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+
+    0% {
+      opacity: 0;
+      -webkit-transform: translate3d(0, -3000px, 0);
+      transform: translate3d(0, -3000px, 0);
+    }
+
+    60% {
+      opacity: 1;
+      -webkit-transform: translate3d(0, 25px, 0);
+      transform: translate3d(0, 25px, 0);
+    }
+
+    75% {
+      -webkit-transform: translate3d(0, -10px, 0);
+      transform: translate3d(0, -10px, 0);
+    }
+
+    90% {
+      -webkit-transform: translate3d(0, 5px, 0);
+      transform: translate3d(0, 5px, 0);
+    }
+
+    to {
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  .bounceInDown {
+    -webkit-animation-name: bounceInDown;
+    animation-name: bounceInDown;
   }
 }
 </style>

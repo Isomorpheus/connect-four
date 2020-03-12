@@ -8,7 +8,6 @@ Vue.use(Vuex)
 const gRows = (n: number): Array<number> => [...Array(n)]
 const matrix = (r: number, c: number) =>
   gRows(r).map((r, i) => gRows(c).fill(0))
-console.log(gRows, matrix)
 
 export default new Vuex.Store({
   state: {
@@ -39,7 +38,6 @@ export default new Vuex.Store({
         fetch('/api/moves')
           .then(res => res.json())
           .then(json => {
-            console.log('tester', json.column)
             this.dispatch(types.PICK_TILE, json.column)
 
             commit(types.SET_IS_LOADING, false)
@@ -50,8 +48,21 @@ export default new Vuex.Store({
     [types.PICK_TILE]({ state, commit }, payload: number): void {
       // get column
       let currentBoard = [...transpose(state.board)]
+      // for available cells
+      if (!currentBoard.flat().includes(0)) {
+        commit(types.SET_GAMESTATE, 'game over')
+        return
+      }
       // find first 0
       let getIndex = currentBoard[payload].indexOf(0)
+      if (getIndex < 0 && state.activePlayer === 2) {
+        this.dispatch(types.GET_SERVER_MOVE)
+        return
+      }
+
+      if (getIndex < 0) {
+        return
+      }
 
       // put player in matrix
       let updatedColumn = replaceAt(
@@ -71,7 +82,6 @@ export default new Vuex.Store({
     },
     [types.SET_GAMESTATE_TO_WIN]({ state, commit }, { player }) {
       commit(types.SET_GAMESTATE, 'game over')
-      console.log(player)
     }
   },
   modules: {}

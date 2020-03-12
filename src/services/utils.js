@@ -6,3 +6,6 @@ export const replaceAt = (array, index, value) => {
   newArray[index] = value
   return newArray
 }
+
+export const pipe = (...fns) => x => fns.reduce((v, f) => f(v), x)
+export const reverser = array => array.reverse()
