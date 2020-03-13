@@ -2,9 +2,8 @@
 
 import { Server } from 'miragejs'
 
-export function makeServer({ environment = 'development' } = {}) {
+export function makeServer() {
   const server = new Server({
-    environment,
 
     routes() {
       this.namespace = 'api'
