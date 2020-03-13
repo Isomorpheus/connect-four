@@ -11,13 +11,15 @@ interface seedValues {
   board: number[][]
   activePlayer: number
   gameState: string
+  winner: number,
   [key: string]: seedValues[keyof seedValues]
 }
 const seed = (): seedValues => ({
   isLoading: false,
   board: matrix(6, 7),
   activePlayer: 1,
-  gameState: 'play'
+  gameState: 'play',
+  winner: 0,
 })
 
 // helper functions
@@ -45,6 +47,9 @@ export default new Vuex.Store({
     },
     [types.SET_IS_LOADING](state, payload) {
       Vue.set(state, 'isLoading', payload)
+    },
+    [types.SET_WINNER](state, player) {
+      Vue.set(state, 'winner', player)
     }
   },
   actions: {
@@ -99,6 +104,7 @@ export default new Vuex.Store({
     },
     [types.SET_GAMESTATE_TO_WIN]({ state, commit }, { player }) {
       commit(types.SET_GAMESTATE, 'game over')
+      commit(types.SET_WINNER, player)
     },
     [types.INIT_BOARD]({ commit }) {
       commit(types.INIT_BOARD)

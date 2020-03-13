@@ -1,17 +1,16 @@
 <template>
   <div id="mod">
-    <button class="button" @click="showModal = true">Show Modal</button>
     <transition name="fade" appear>
       <div
-        v-if="showModal"
+        v-if="showModalProp"
         class="modal-overlay"
-        @click="showModal = false"
+        @click="$emit('showModal', false)"
       ></div>
     </transition>
     <transition name="pop" appear>
-      <div v-if="showModal" class="modal" role="dialog">
+      <div v-if="showModalProp" class="modal" role="dialog">
         <slot></slot>
-        <button class="button" @click="showModal = false">
+        <button class="button" @click="$emit('showModal', false)">
           Hide Modal
         </button>
       </div>
@@ -35,8 +34,6 @@ export default {
   },
   watch: {
     showModalProp(d) {
-      console.log(d)
-
       this.showModal = true
     }
   }

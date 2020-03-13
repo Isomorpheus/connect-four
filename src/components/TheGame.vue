@@ -53,32 +53,19 @@ export default {
   },
   data: () => ({}),
   computed: {
-    ...mapState(['isLoading', 'board', 'gameState', 'activePlayer']),
+    ...mapState(['isLoading', 'board', 'gameState', 'activePlayer', 'winner']),
     transposedBoard() {
       return transpose(this.board)
     }
   },
   watch: {
     transposedBoard(o, n) {
-      console.log(o, n)
-
+      console.log(n, o)
       this.doWeHaveAWinner()
     }
   },
   mounted() {
-    const collection = this.$refs.cell_ref
-
-    gsap.from(collection, {
-      duration: 0.5,
-      scale: 0.2,
-      opacity: 0,
-      stagger: {
-        amount: 0.5,
-        from: 'center',
-        ease: 'power.easout',
-        grid: [7, 6]
-      }
-    })
+    this.newGameAni()
   },
   methods: {
     ...mapActions([types.PICK_TILE]),
@@ -101,6 +88,35 @@ export default {
       if (winner > 0) {
         this.$emit('win', { player: winner })
       }
+    },
+    newGameAni() {
+      const collection = this.$refs.cell_ref
+      gsap.from(collection, {
+        duration: 0.5,
+        scale: 0.2,
+        opacity: 0,
+        stagger: {
+          amount: 0.5,
+          from: 'center',
+          ease: 'power.easout',
+          grid: [7, 6]
+        }
+      })
+    },
+    clearGameAni() {
+      const collection = this.$refs.cell_ref
+      gsap.to(collection, {
+        duration: 0.5,
+        scale: 0.2,
+        opacity: 0,
+        stagger: {
+          amount: 0.5,
+          from: 'center',
+          ease: 'power.easout',
+          grid: [7, 6]
+        },
+        onComplete: this.newGameAni
+      })
     },
     aninmatedCol(c) {
       // look at what w have
@@ -166,13 +182,13 @@ export default {
         opacity: 0.6;
       }
       &:hover {
-        background: var(--primary);
+        background: #ddd;
       }
       &.topCell {
-        background: #fff;
+        background: #fff !important;
         &:hover {
           border-radius: 50%;
-          background: var(--primary);
+          background: var(--primary) !important;
         }
       }
       &.topCell:hover ~ .cell {
@@ -196,6 +212,13 @@ export default {
     .color_2 {
       .item {
         background: rgb(240, 220, 67);
+      }
+    }
+
+    &:hover > *:not(:hover) {
+      background: #ddd;
+      .topCell {
+        background: #333;
       }
     }
   }

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Modal :show-modal-prop="mod">modal</Modal>
+    <Modal :show-modal-prop="mod" @showModal="modHandler">modal</Modal>
     <div v-if="gameState === 'game over'">
       <h1 v-if="winner">Game over player {{ winner }} wins</h1>
       <h1 v-else-if="winner">Game over draw</h1>
@@ -8,6 +8,7 @@
     </div>
 
     <TheGame
+      ref="TheGame"
       :win-check-strategy="SmartCheckWinStrategy"
       @win="setGameStatetoWin"
     />
@@ -29,26 +30,27 @@ export default {
   },
   data: () => ({
     gameActive: false,
-    winner: '',
     mod: false,
     color: {
+      0: '#ddd',
       1: 'rgb(0, 177, 242)',
       2: '#fccf1a'
     }
   }),
   computed: {
-    ...mapState(['gameState', 'activePlayer']),
+    ...mapState(['gameState', 'activePlayer', 'winner']),
     SmartCheckWinStrategy: () => SmartCheckWinStrategy
   },
   watch: {
-    winner() {
-      this.mod = true
+    winner(w) {
+      console.log('w', w)
+      w !== 0 ? (this.mod = true) : (this.mod = false)
     },
     activePlayer() {
       if (this.activePlayer !== '-' && !this.gameState.includes('game over')) {
         this.$root.$el.style.setProperty(
           '--primary',
-          this.color[this.activePlayer]
+          this.color[this.winner === 0 ? this.activePlayer : this.winner]
         )
       }
     }
@@ -57,12 +59,15 @@ export default {
     ...mapActions([types.SET_GAMESTATE_TO_WIN, types.INIT_BOARD]),
     setGameStatetoWin(w) {
       this.SET_GAMESTATE_TO_WIN(w)
-      this.winner = w.player
-
+      // this.winner = w.player
       this.mod = true
     },
     newGame() {
+      this.$refs.TheGame.newGameAni()
       this.INIT_BOARD()
+    },
+    modHandler(e) {
+      this.mod = e[0]
     }
   }
 }
