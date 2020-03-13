@@ -5,7 +5,7 @@ import { makeServer } from './server'
 
 Vue.config.productionTip = false
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development' && process.env.NODE_ENV === 'production' ) {
   makeServer()
 }
 
