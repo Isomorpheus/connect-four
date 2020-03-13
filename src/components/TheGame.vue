@@ -7,7 +7,7 @@
       :class="`col_${i}`"
     >
       <div
-        class="cell topCell  animated bounceInDown"
+        class="cell topCell animated bounceInDown"
         :class="`tc_${activePlayer}`"
         @click="onClickCell(`${i}`)"
       >
@@ -22,7 +22,13 @@
         :class="`color_${cell}`"
         @click="onClickCell(`${i}`, this)"
       >
-        <div v-if="cell !== 0" class="test">
+        <div
+          v-show="cell !== 0"
+          :ref="`${i}${ic}`"
+          class="item"
+          transition="expand"
+          @enter="enter()"
+        >
           {{ `${i}${ic} ${cell}` }}
         </div>
       </div>
@@ -63,7 +69,7 @@ export default {
     const collection = this.$refs.cell_ref
 
     gsap.from(collection, {
-      duration: 0.85,
+      duration: 0.5,
       scale: 0.2,
       opacity: 0,
       stagger: {
@@ -86,6 +92,9 @@ export default {
         this.aninmatedCol(c)
       }
     },
+    enter(e) {
+      console.log('enter', e)
+    },
     doWeHaveAWinner() {
       const winner = this.winCheckStrategy(this.board)
 
@@ -101,9 +110,8 @@ export default {
       const collection = document.querySelectorAll(`.col_${c} .cell`)
       console.log(collection)
       gsap.from(collection, {
-        duration: 1,
-        scale: 0.4,
-        borderRadius: '10%',
+        duration: 0.5,
+        opacity: 0.2,
         stagger: {
           amount: 0.6,
           from: 'start'
@@ -115,12 +123,27 @@ export default {
 </script>
 
 <style lang="scss">
+.expand-transition {
+  transition: all 0.9s ease;
+  height: 30px;
+  padding: 10px;
+  background-color: #eee;
+  overflow: hidden;
+}
+.expand-enter,
+.expand-leave {
+  height: 0;
+  padding: 0 10px;
+  opacity: 0;
+}
 .grid {
   margin: 2rem auto;
   padding-top: 1rem; // space for indicator
   position: relative;
   display: grid;
+  grid-row-gap: 10px;
   grid-template-rows: repeat(7, 150px);
+  grid-column-gap: 1px;
   grid-template-columns: repeat(7, 150px);
 
   .boardColumn {
@@ -129,9 +152,19 @@ export default {
       background: #eee;
       width: 150px;
       height: 150px;
-      border-radius: 50%;
+      border-radius: 10%;
       align-items: center;
       justify-content: center;
+      .item {
+        display: flex;
+        height: 95%;
+        width: 95%;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: #ddd;
+        opacity: 0.6;
+      }
       &:hover {
         background: var(--primary);
       }
@@ -156,12 +189,14 @@ export default {
       }
     }
     .color_1 {
-      border-radius: 5%;
-      background: rgb(23, 157, 247);
+      .item {
+        background: rgb(23, 157, 247);
+      }
     }
     .color_2 {
-      border-radius: 50%;
-      background: rgb(240, 220, 67);
+      .item {
+        background: rgb(240, 220, 67);
+      }
     }
   }
   .animated {

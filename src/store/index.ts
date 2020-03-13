@@ -5,18 +5,35 @@ import { transpose, replaceAt } from '../services/utils'
 
 Vue.use(Vuex)
 
+// initial values for store
+interface seedValues {
+  isLoading: boolean
+  board: number[][]
+  activePlayer: number
+  gameState: string
+  [key: string]: seedValues[keyof seedValues]
+}
+const seed = (): seedValues => ({
+  isLoading: false,
+  board: matrix(6, 7),
+  activePlayer: 1,
+  gameState: 'play'
+})
+
+// helper functions
 const gRows = (n: number): Array<number> => [...Array(n)]
 const matrix = (r: number, c: number) =>
   gRows(r).map((r, i) => gRows(c).fill(0))
 
 export default new Vuex.Store({
-  state: {
-    isLoading: false,
-    board: matrix(6, 7),
-    activePlayer: 1,
-    gameState: 'play'
-  },
+  state: {...seed()},
   mutations: {
+    [types.INIT_BOARD](state) {
+      const s = seed()
+      Object.keys(s).forEach(key => {
+        state[key] = s[key]
+      })
+    },
     [types.SET_BOARD](state, payload) {
       Vue.set(state, 'board', payload)
     },
@@ -82,6 +99,9 @@ export default new Vuex.Store({
     },
     [types.SET_GAMESTATE_TO_WIN]({ state, commit }, { player }) {
       commit(types.SET_GAMESTATE, 'game over')
+    },
+    [types.INIT_BOARD]({ commit }) {
+      commit(types.INIT_BOARD)
     }
   },
   modules: {}

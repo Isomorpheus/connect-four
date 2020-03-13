@@ -1,0 +1,105 @@
+<template>
+  <div id="mod">
+    <button class="button" @click="showModal = true">Show Modal</button>
+    <transition name="fade" appear>
+      <div
+        v-if="showModal"
+        class="modal-overlay"
+        @click="showModal = false"
+      ></div>
+    </transition>
+    <transition name="pop" appear>
+      <div v-if="showModal" class="modal" role="dialog">
+        <slot></slot>
+        <button class="button" @click="showModal = false">
+          Hide Modal
+        </button>
+      </div>
+    </transition>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Modal',
+  props: {
+    showModalProp: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    return {
+      showModal: false
+    }
+  },
+  watch: {
+    showModalProp(d) {
+      console.log(d)
+
+      this.showModal = true
+    }
+  }
+}
+</script>
+
+<style>
+.modal {
+  position: absolute;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  text-align: center;
+  width: fit-content;
+  height: fit-content;
+  max-width: 22em;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+  background: #fff;
+  z-index: 999;
+  transform: none;
+}
+.modal h1 {
+  margin: 0 0 1rem;
+}
+
+.modal-overlay {
+  content: '';
+  position: absolute;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 998;
+  background: var(--primary);
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+/* ---------------------------------- */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.4s linear;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.pop-enter-active,
+.pop-leave-active {
+  transition: transform 0.4s cubic-bezier(0.5, 0, 0.5, 1), opacity 0.4s linear;
+}
+
+.pop-enter,
+.pop-leave-to {
+  opacity: 0;
+  transform: scale(0.3) translateY(-50%);
+}
+</style>
