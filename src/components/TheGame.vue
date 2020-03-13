@@ -14,13 +14,9 @@
         :class="`color_${cell}`"
         @click="onClickCell(`${i}`)"
       >
-        <div
-          v-show="cell !== 0"
-          :ref="`${i}${ic}`"
-          class="item"
-          transition="expand"
-          @enter="enter()"
-        ></div>
+        <transition name="expand" @enter="enter"
+          ><div v-if="cell !== 0" :ref="`${i}${ic}`" class="item"></div>
+        </transition>
       </div>
     </div>
   </div>
@@ -69,7 +65,12 @@ export default {
       }
     },
     enter(e) {
-      console.log('enter', e)
+      gsap.from(e, {
+        duration: 0.5,
+        scale: 0.4,
+        y: -500,
+        ease: 'bounce'
+      })
     },
     doWeHaveAWinner() {
       const winner = this.winCheckStrategy(this.board)
@@ -111,7 +112,7 @@ export default {
       const collection = document.querySelectorAll(`.col_${c} .cell`)
       gsap.from(collection, {
         duration: 0.45,
-        opacity: 0.1,
+        background: 'rgba(220, 220, 220, 0.8)',
         stagger: {
           amount: 0.5,
           from: 'start'
@@ -148,7 +149,7 @@ export default {
   .boardColumn {
     .cell {
       display: flex;
-      background: #eee;
+      background: var(--background-light, rgba(240, 240, 20, 0.8));
       width: var(--base-unit, 150px);
       height: var(--base-unit, 150px);
       border-radius: 10%;
@@ -162,7 +163,7 @@ export default {
         justify-content: center;
         border-radius: 50%;
         background: #ddd;
-        opacity: 0.6;
+        opacity: 0.9;
       }
       &:hover {
         background: #ddd;
@@ -179,11 +180,11 @@ export default {
 
         &.color_1 {
           border-radius: 5%;
-          background: rgba(23, 157, 247, 0.5);
+          background: rgba(23, 157, 247, 0.9);
         }
         &.color_2 {
           border-radius: 50%;
-          background: rgba(240, 220, 67, 0.5);
+          background: rgba(#fccf1a, 0.9);
         }
       }
     }
@@ -194,7 +195,7 @@ export default {
     }
     .color_2 {
       .item {
-        background: rgb(240, 220, 67);
+        background: rgba(#fccf1a, 0.9);
       }
     }
 

@@ -86,6 +86,8 @@ export default {
   --primary: rgb(0, 177, 242);
   --secundary: #fccf1a;
   --base-unit: 100px;
+  --background-light: rgba(200, 200, 200, 0.8);
+  --background-ultra-light: rgba(220, 220, 220, 0.8);
 }
 #app {
   display: grid;
