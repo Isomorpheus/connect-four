@@ -15,21 +15,26 @@ Create a single-page web application which allows the user to play the game ["Co
 
 The typical game looks like:
 
-1. Player can start a new game
-1. Player and computer take turns placing discs
-1. Winner is shown when game is finished
+-   [x] Player can start a new game
+-   [x] Player and computer take turns placing discs
+-   [x] Winner is shown when game is finished
 
 ### Requirements
 
-1. UI application must be implemented using Vue.js
-1. UI must be user friendly
-1. Players cannot act during each others turns
-1. Opponent logic must run server side (please document how to start the server)
-1. Code must be supplied as git repository
-1. Computer player must at the very least return a random column
+-   [x] UI application must be implemented using Vue.js
+-   [x] UI must be user friendly
+-   [x] Players cannot act during each others turns
+-   [x] Opponent logic must run server side (please document how to start the server)
+-   [x] Code must be supplied as git repository
+-   [x] Computer player must at the very least return a random column
 
 ### Supplied
 
 1. Jest for unit testing
 1. TypeScript support
 1. SASS support
+
+### Server
+Mirage is used for the oponent moves. Therefore there is no need to start the mockserver seperatly. The logic is kept to a MVP to meet the requirement. The logic can be found ```/src/server.js``` it provides the endpoint ```/api/moves``` which gives a response with an object with a random column number. Server responses can be checked in the console.
+
+

@@ -81,7 +81,7 @@ export default {
     newGameAni() {
       const collection = this.$refs.cell_ref
       gsap.from(collection, {
-        duration: 0.5,
+        duration: 0.55,
         scale: 0.2,
         opacity: 0,
         stagger: {
@@ -110,10 +110,10 @@ export default {
     aninmatedCol(c) {
       const collection = document.querySelectorAll(`.col_${c} .cell`)
       gsap.from(collection, {
-        duration: 0.5,
-        opacity: 0.2,
+        duration: 0.45,
+        opacity: 0.1,
         stagger: {
-          amount: 0.6,
+          amount: 0.5,
           from: 'start'
         }
       })

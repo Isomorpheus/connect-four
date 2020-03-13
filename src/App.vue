@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Modal :show-modal-prop="mod" :winner="winner" @showModal="modHandler">
+    <Modal :show-modal-prop="modal" :winner="winner" @showModal="modHandler">
       <div v-if="gameState === 'game over'">
         <h1 v-if="winner === 1">Awesome! You've won this one</h1>
 
@@ -32,7 +32,7 @@ export default {
   },
   data: () => ({
     gameActive: false,
-    mod: false,
+    modal: false,
     color: {
       0: '#ddd',
       1: 'rgb(0, 177, 242)',
@@ -45,7 +45,7 @@ export default {
   },
   watch: {
     winner(w) {
-      w !== 0 ? (this.mod = true) : (this.mod = false)
+      w !== 0 ? (this.modal = true) : (this.modal = false)
     },
     activePlayer() {
       if (this.activePlayer !== '-' && !this.gameState.includes('game over')) {
@@ -61,15 +61,14 @@ export default {
     setGameStatetoWin(w) {
       this.SET_GAMESTATE_TO_WIN(w)
       this.$root.$el.style.setProperty('--primary', this.color[w.player])
-      // this.winner = w.player
-      this.mod = true
+      this.modal = true
     },
     newGame() {
       this.$refs.TheGame.newGameAni()
       this.INIT_BOARD()
     },
     modHandler(e) {
-      this.mod = e[0]
+      this.modal = e[0]
       if (e[1] === 'new game') {
         this.newGame()
       }
