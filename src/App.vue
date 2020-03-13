@@ -1,7 +1,16 @@
 <template>
   <div id="app">
-    <div v-if="gameState === 'game over'"><h1>GameOver</h1></div>
+    <Modal :show-modal-prop="mod" :winner="winner" @showModal="modHandler">
+      <div v-if="gameState === 'game over'">
+        <h1 v-if="winner === 1">Awesome! You've won this one</h1>
+
+        <h1 v-if="winner === 2">You've lost this one</h1>
+        <h1 v-else-if="winner === 0">Draw</h1>
+        <button class="button bouncy" @click="newGame">Play again</button>
+      </div>
+    </Modal>
     <TheGame
+      ref="TheGame"
       :win-check-strategy="SmartCheckWinStrategy"
       @win="setGameStatetoWin"
     />
@@ -12,37 +21,78 @@
 import { mapState, mapActions } from 'vuex'
 import types from '@/store/typings'
 import TheGame from './components/TheGame.vue'
+import Modal from './components/Modal'
 import { SmartCheckWinStrategy } from './services'
 
 export default {
   name: 'App',
   components: {
-    TheGame
+    TheGame,
+    Modal
   },
   data: () => ({
-    gameActive: false
+    gameActive: false,
+    mod: false,
+    color: {
+      0: '#ddd',
+      1: 'rgb(0, 177, 242)',
+      2: '#fccf1a'
+    }
   }),
   computed: {
-    ...mapState(['gameState']),
+    ...mapState(['gameState', 'activePlayer', 'winner']),
     SmartCheckWinStrategy: () => SmartCheckWinStrategy
   },
+  watch: {
+    winner(w) {
+      w !== 0 ? (this.mod = true) : (this.mod = false)
+    },
+    activePlayer() {
+      if (this.activePlayer !== '-' && !this.gameState.includes('game over')) {
+        this.$root.$el.style.setProperty(
+          '--primary',
+          this.color[this.winner === 0 ? this.activePlayer : this.winner]
+        )
+      }
+    }
+  },
   methods: {
-    ...mapActions([types.SET_GAMESTATE_TO_WIN]),
-    setGameStatetoWin(e) {
-      this.SET_GAMESTATE_TO_WIN(e)
-      console.log('setGameStatetoWin', e)
+    ...mapActions([types.SET_GAMESTATE_TO_WIN, types.INIT_BOARD]),
+    setGameStatetoWin(w) {
+      this.SET_GAMESTATE_TO_WIN(w)
+      this.$root.$el.style.setProperty('--primary', this.color[w.player])
+      // this.winner = w.player
+      this.mod = true
+    },
+    newGame() {
+      this.$refs.TheGame.newGameAni()
+      this.INIT_BOARD()
+    },
+    modHandler(e) {
+      this.mod = e[0]
+      if (e[1] === 'new game') {
+        this.newGame()
+      }
     }
   }
 }
 </script>
 
 <style lang="scss">
+@font-face {
+  font-family: 'Hepta Slab';
+  src: url('/fonts/HeptaSlabGX.ttf') format('truetype');
+}
+:root {
+  --primary: rgb(0, 177, 242);
+  --secundary: #fccf1a;
+  --base-unit: 100px;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  display: grid;
+  grid-template-rows: auto auto;
+  grid-template-columns: auto;
+  background: var(--pimary);
+  font-family: 'Hepta Slab', 'Times New Roman', Times, serif;
 }
 </style>
