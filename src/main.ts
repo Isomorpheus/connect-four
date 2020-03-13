@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import App from './App.vue'
 import store from './store'
+
+//server logic
 import { makeServer } from './server'
 
 Vue.config.productionTip = false
 
-if (process.env.NODE_ENV === 'development' && process.env.NODE_ENV === 'production' ) {
-  makeServer()
-}
+makeServer()
 
 new Vue({
   store,
