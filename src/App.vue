@@ -1,12 +1,14 @@
 <template>
   <div id="app">
-    <Modal :show-modal-prop="mod" @showModal="modHandler">modal</Modal>
-    <div v-if="gameState === 'game over'">
-      <h1 v-if="winner">Game over player {{ winner }} wins</h1>
-      <h1 v-else-if="winner">Game over draw</h1>
-      <button @click="newGame">play again</button>
-    </div>
+    <Modal :show-modal-prop="mod" :winner="winner" @showModal="modHandler">
+      <div v-if="gameState === 'game over'">
+        <h1 v-if="winner === 1">Awesome! You've won this one</h1>
 
+        <h1 v-if="winner === 2">You've lost this one</h1>
+        <h1 v-else-if="winner === 0">Draw</h1>
+        <button class="button bouncy" @click="newGame"> Play again </button>
+      </div>
+    </Modal>
     <TheGame
       ref="TheGame"
       :win-check-strategy="SmartCheckWinStrategy"
@@ -59,6 +61,7 @@ export default {
     ...mapActions([types.SET_GAMESTATE_TO_WIN, types.INIT_BOARD]),
     setGameStatetoWin(w) {
       this.SET_GAMESTATE_TO_WIN(w)
+      this.$root.$el.style.setProperty('--primary', this.color[w.player])
       // this.winner = w.player
       this.mod = true
     },
@@ -67,21 +70,31 @@ export default {
       this.INIT_BOARD()
     },
     modHandler(e) {
+      console.log(e[1])
       this.mod = e[0]
+      if (e[1] === 'new game') {
+        this.newGame()
+      }
     }
   }
 }
 </script>
 
 <style lang="scss">
+@font-face {
+  font-family: 'Hepta Slab';
+  src: url('/fonts/HeptaSlabGX.ttf') format('truetype');
+}
 :root {
   --primary: rgb(0, 177, 242);
   --secundary: #fccf1a;
+  --base-unit: 100px;
 }
 #app {
   display: grid;
   grid-template-rows: auto auto;
   grid-template-columns: auto;
   background: var(--pimary);
+  font-family: 'Hepta Slab', 'Times New Roman', Times, serif;
 }
 </style>

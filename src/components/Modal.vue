@@ -4,15 +4,18 @@
       <div
         v-if="showModalProp"
         class="modal-overlay"
-        @click="$emit('showModal', false)"
+        @click="closeStartNew"
       ></div>
     </transition>
     <transition name="pop" appear>
       <div v-if="showModalProp" class="modal" role="dialog">
+        <p>
+          <span>G</span><span>A</span><span>M</span><span>E</span> <br /><span
+            >O</span
+          >
+          <span>V</span><span>E</span><span>R</span>
+        </p>
         <slot></slot>
-        <button class="button" @click="$emit('showModal', false)">
-          Hide Modal
-        </button>
       </div>
     </transition>
   </div>
@@ -35,6 +38,11 @@ export default {
   watch: {
     showModalProp(d) {
       this.showModal = true
+    }
+  },
+  methods: {
+    closeStartNew() {
+      this.$emit('showModal', [false, 'new game'])
     }
   }
 }
@@ -73,9 +81,63 @@ export default {
   bottom: 0;
   left: 0;
   z-index: 998;
-  background: var(--primary);
+  background: var(--primary, #333);
   opacity: 0.6;
   cursor: pointer;
+}
+
+/* ---------------------------------- */
+
+button {
+  display: inline-block;
+  padding: 0.35em 1.2em;
+  border: 0.1em solid #000;
+  margin: 0 0.3em 0.3em 0;
+  border-radius: 0.12em;
+  box-sizing: border-box;
+  text-decoration: none;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  color: #000;
+  text-align: center;
+  transition: all 0.2s;
+}
+button:hover {
+  color: #000000;
+  background-color: #ffffff;
+}
+@media all and (max-width: 30em) {
+  button {
+    display: block;
+    margin: 0.4em auto;
+  }
+}
+.bouncy {
+  animation: bouncy 5s infinite linear;
+  position: relative;
+}
+@keyframes bouncy {
+  0% {
+    top: 0em;
+  }
+  40% {
+    top: 0em;
+  }
+  43% {
+    top: -0.9em;
+  }
+  46% {
+    top: 0em;
+  }
+  48% {
+    top: -0.4em;
+  }
+  50% {
+    top: 0em;
+  }
+  100% {
+    top: 0em;
+  }
 }
 
 /* ---------------------------------- */
@@ -98,5 +160,76 @@ export default {
 .pop-leave-to {
   opacity: 0;
   transform: scale(0.3) translateY(-50%);
+}
+
+/**  fontaninmation */
+
+@font-face {
+  font-family: 'Hepta Slab';
+  src: url('/fonts/HeptaSlabGX.ttf') format('truetype');
+}
+
+p {
+  font-family: 'Hepta Slab';
+  font-size: 7vh;
+  font-variation-settings: 'wght' 0;
+  text-align: center;
+}
+
+p span:nth-child(1) {
+  animation: weighted 2.1s infinite ease-in-out;
+  animation-delay: calc(0 * 0.08s);
+}
+
+p span:nth-child(2) {
+  animation: weighted 2.1s infinite ease-in-out;
+  animation-delay: calc(1 * 0.08s);
+}
+
+p span:nth-child(3) {
+  animation: weighted 2.1s infinite ease-in-out;
+  animation-delay: calc(2 * 0.08s);
+}
+
+p span:nth-child(4) {
+  animation: weighted 2.1s infinite ease-in-out;
+  animation-delay: calc(3 * 0.08s);
+}
+
+p span:nth-child(5) {
+  animation: weighted 2.1s infinite ease-in-out;
+  animation-delay: calc(4 * 0.08s);
+}
+
+p span:nth-child(6) {
+  animation: weighted 2.1s infinite ease-in-out;
+  animation-delay: calc(5 * 0.08s);
+}
+
+p span:nth-child(7) {
+  animation: weighted 2.1s infinite ease-in-out;
+  animation-delay: calc(6 * 0.08s);
+}
+
+p span:nth-child(8) {
+  animation: weighted 2.1s infinite ease-in-out;
+  animation-delay: calc(7 * 0.08s);
+}
+
+p span:nth-child(9) {
+  animation: weighted 2.1s infinite ease-in-out;
+  animation-delay: calc(8 * 0.08s);
+}
+
+@keyframes weighted {
+  0% {
+    font-variation-settings: 'wght' 0;
+  }
+  50% {
+    font-variation-settings: 'wght' 1000;
+  }
+  100% {
+    font-variation-settings: 'wght' 0;
+  }
 }
 </style>

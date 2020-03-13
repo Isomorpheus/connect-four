@@ -7,20 +7,12 @@
       :class="`col_${i}`"
     >
       <div
-        class="cell topCell animated bounceInDown"
-        :class="`tc_${activePlayer}`"
-        @click="onClickCell(`${i}`)"
-      >
-        c {{ i }}
-      </div>
-
-      <div
         v-for="(cell, ic) in column.reverse()"
         ref="cell_ref"
         :key="'c' + ic"
         class="cell"
         :class="`color_${cell}`"
-        @click="onClickCell(`${i}`, this)"
+        @click="onClickCell(`${i}`)"
       >
         <div
           v-show="cell !== 0"
@@ -28,9 +20,7 @@
           class="item"
           transition="expand"
           @enter="enter()"
-        >
-          {{ `${i}${ic} ${cell}` }}
-        </div>
+        ></div>
       </div>
     </div>
   </div>
@@ -157,17 +147,16 @@ export default {
   padding-top: 1rem; // space for indicator
   position: relative;
   display: grid;
-  grid-row-gap: 10px;
-  grid-template-rows: repeat(7, 150px);
-  grid-column-gap: 1px;
-  grid-template-columns: repeat(7, 150px);
+  grid-gap: 1px;
+  grid-template-rows: repeat(6, var(--base-unit, 150px));
+  grid-template-columns: repeat(7, var(--base-unit, 150px));
 
   .boardColumn {
     .cell {
       display: flex;
       background: #eee;
-      width: 150px;
-      height: 150px;
+      width: var(--base-unit, 150px);
+      height: var(--base-unit, 150px);
       border-radius: 10%;
       align-items: center;
       justify-content: center;
