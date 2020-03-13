@@ -49,8 +49,7 @@ export default {
     }
   },
   watch: {
-    transposedBoard(o, n) {
-      console.log(n, o)
+    transposedBoard() {
       this.doWeHaveAWinner()
     }
   },
@@ -109,12 +108,7 @@ export default {
       })
     },
     aninmatedCol(c) {
-      // look at what w have
-      console.log(this.transposedBoard[c])
-      // get dom elements
-      //const collection = this.$refs.cell_ref
       const collection = document.querySelectorAll(`.col_${c} .cell`)
-      console.log(collection)
       gsap.from(collection, {
         duration: 0.5,
         opacity: 0.2,

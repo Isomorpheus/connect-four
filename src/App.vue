@@ -6,7 +6,7 @@
 
         <h1 v-if="winner === 2">You've lost this one</h1>
         <h1 v-else-if="winner === 0">Draw</h1>
-        <button class="button bouncy" @click="newGame"> Play again </button>
+        <button class="button bouncy" @click="newGame">Play again</button>
       </div>
     </Modal>
     <TheGame
@@ -45,7 +45,6 @@ export default {
   },
   watch: {
     winner(w) {
-      console.log('w', w)
       w !== 0 ? (this.mod = true) : (this.mod = false)
     },
     activePlayer() {
@@ -70,7 +69,6 @@ export default {
       this.INIT_BOARD()
     },
     modHandler(e) {
-      console.log(e[1])
       this.mod = e[0]
       if (e[1] === 'new game') {
         this.newGame()

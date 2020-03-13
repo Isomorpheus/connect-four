@@ -1,4 +1,4 @@
-import { transpose, pipe, reverser } from '../services/utils'
+import { transpose, pipe, arrayReverse } from '../services/utils'
 
 const players = [1, 2]
 
@@ -48,12 +48,14 @@ const strategy = rows => {
     )
     return diagonalsStartingInTopRow.concat(diaonalsStartingAtFirstColumn)
   }
+
+  // test for winner functions
   const checkHorizontals = pipe(boardForPlayer, testOnWinner)
   const checkVerticals = pipe(boardForPlayer, transpose, testOnWinner)
   const checkDiagonalsDesc = pipe(boardForPlayer, allDiagonals, testOnWinner)
   const checkDiagonalsAsc = pipe(
     boardForPlayer,
-    reverser,
+    arrayReverse,
     allDiagonals,
     testOnWinner
   )

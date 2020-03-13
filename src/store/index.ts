@@ -11,7 +11,7 @@ interface seedValues {
   board: number[][]
   activePlayer: number
   gameState: string
-  winner: number,
+  winner: number
   [key: string]: seedValues[keyof seedValues]
 }
 const seed = (): seedValues => ({
@@ -19,7 +19,7 @@ const seed = (): seedValues => ({
   board: matrix(6, 7),
   activePlayer: 1,
   gameState: 'play',
-  winner: 0,
+  winner: 0
 })
 
 // helper functions
@@ -28,7 +28,7 @@ const matrix = (r: number, c: number) =>
   gRows(r).map((r, i) => gRows(c).fill(0))
 
 export default new Vuex.Store({
-  state: {...seed()},
+  state: { ...seed() },
   mutations: {
     [types.INIT_BOARD](state) {
       const s = seed()

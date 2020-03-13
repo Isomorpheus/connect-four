@@ -36,7 +36,7 @@ export default {
     }
   },
   watch: {
-    showModalProp(d) {
+    showModalProp() {
       this.showModal = true
     }
   },
