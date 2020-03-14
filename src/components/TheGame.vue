@@ -139,7 +139,6 @@ export default {
       )
     },
     highLightCol(event, c) {
-
       const collection = document.querySelectorAll(`.col_${c} .cell`)
 
       if (event === 'over') {
