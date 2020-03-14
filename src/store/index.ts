@@ -60,7 +60,9 @@ export default new Vuex.Store({
         fetch('/api/moves')
           .then(res => res.json())
           .then(json => {
-            this.dispatch(types.PICK_TILE, json.column)
+            if (state.gameState === 'play') {
+              this.dispatch(types.PICK_TILE, json.column)
+            } 
 
             commit(types.SET_IS_LOADING, false)
           })

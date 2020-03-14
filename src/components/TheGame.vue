@@ -112,7 +112,7 @@ export default {
       const collection = document.querySelectorAll(`.col_${c} .cell`)
       gsap.from(collection, {
         duration: 0.45,
-        background: 'rgba(220, 220, 220, 0.8)',
+        background: 'rgba(220, 220, 220, 0.2)',
         stagger: {
           amount: 0.5,
           from: 'start'
@@ -166,7 +166,7 @@ export default {
         opacity: 0.9;
       }
       &:hover {
-        background: #ddd;
+        background: rgba(220, 220, 220, 0.7);
       }
       &.topCell {
         background: #fff !important;
@@ -200,7 +200,7 @@ export default {
     }
 
     &:hover > *:not(:hover) {
-      background: #ddd;
+      background: rgba(220, 220, 220, 0.7);
       .topCell {
         background: #333;
       }
