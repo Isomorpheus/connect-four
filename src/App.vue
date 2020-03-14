@@ -36,9 +36,9 @@ export default {
     gameActive: false,
     modal: false,
     color: {
-      0: '#ddd',
+      0: 'rgba(240, 240, 240, 0.8)',
       1: 'rgb(0, 177, 242)',
-      2: '#fccf1a'
+      2: 'rgb(252, 207, 26)'
     }
   }),
   computed: {
@@ -86,10 +86,8 @@ export default {
 }
 :root {
   --primary: rgb(0, 177, 242);
-  --secundary: #fccf1a;
+  --secundary: rgb(252, 207, 26);
   --base-unit: 100px;
-  --background-light: rgba(200, 200, 200, 0.8);
-  --background-ultra-light: rgba(220, 220, 220, 0.8);
 }
 #app {
   margin: 0;

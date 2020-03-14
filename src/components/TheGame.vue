@@ -5,17 +5,25 @@
       :key="'r' + i"
       class="boardColumn"
       :class="`col_${i}`"
+      @mouseover="highLightCol('over', `${i}`)"
+      @mouseleave="highLightCol('leave', `${i}`)"
     >
       <div
         v-for="(cell, ic) in column.reverse()"
+        id="`c_${i}_${ic}`"
         ref="cell_ref"
         :key="'c' + ic"
         class="cell"
         :class="`color_${cell}`"
         @click="onClickCell(`${i}`)"
       >
-        <transition name="expand" @enter="enter"
-          ><div v-if="cell !== 0" :ref="`${i}${ic}`" class="item"></div>
+        <transition name="expand" @enter="ServerItemEnter"
+          ><div
+            v-if="cell !== 0"
+            :ref="`${i}${ic}`"
+            class="item"
+            :data-column="`${i}`"
+          ></div>
         </transition>
       </div>
     </div>
@@ -61,11 +69,12 @@ export default {
         !this.isLoading
       ) {
         this.PICK_TILE(c)
-        this.aninmatedCol(c)
+        this.aninmateCol(c)
       }
     },
-    enter(e) {
-      gsap.from(e, {
+    ServerItemEnter(el) {
+      this.aninmateCol(el.dataset.column)
+      gsap.from(el, {
         duration: 0.5,
         scale: 0.4,
         y: -500,
@@ -108,52 +117,60 @@ export default {
         onComplete: this.newGameAni
       })
     },
-    aninmatedCol(c) {
+    aninmateCol(c) {
       const collection = document.querySelectorAll(`.col_${c} .cell`)
       gsap.fromTo(
         collection,
         {
-          duration: 0.45,
-          background: 'rgba(220, 220, 220, 0.2)',
+          duration: 0.55,
+          background: 'rgba(240, 240, 240, 0.1)',
           stagger: {
             amount: 0.5,
             from: 'start'
           }
         },
         {
-          background: 'rgba(200, 200, 200, 0.8)'
+          background: 'rgba(240, 240, 240, 0.8)'
         }
       )
     },
-    highLightCol(c) {
+    highLightCol(event, c) {
+      console.log('h',event, c)
+
       const collection = document.querySelectorAll(`.col_${c} .cell`)
-      gsap.to(collection, {
-        duration: 0.25,
-        background: 'rgba(220, 220, 220, 0.9)'
-      })
+
+      if (event === 'over') {
+        gsap.fromTo(
+          collection,
+          {
+            duration: 0.25,
+            background: 'rgba(240, 240, 240, 0.8)'
+          },
+          {
+            background: 'rgba(250, 250, 250, 0.9)'
+          }
+        )
+      }
+
+      if (event === 'leave') {
+        gsap.to(collection, {
+          duration: 0.25,
+          background: 'rgba(240, 240, 240, 0.8)'
+        })
+      }
     }
   }
 }
 </script>
 
 <style lang="scss">
-.expand-transition {
-  transition: all 0.9s ease;
-  height: 30px;
-  padding: 10px;
-  background-color: #eee;
-  overflow: hidden;
-}
-.expand-enter,
-.expand-leave {
-  height: 0;
-  padding: 0 10px;
-  opacity: 0;
-}
+$base-color: rgb(240, 240, 240);
+$col-default: rgba($base-color, 0.8);
+$col-default-var: var(--col-def, $col-default);
+$color-player-1: rgb(0, 177, 242);
+$color-player-2: rgb(252, 207, 26);
+
 .grid {
-  margin: 2rem auto;
-  padding-top: 1rem; // space for indicator
-  position: relative;
   display: grid;
   grid-gap: 1px;
   grid-template-rows: repeat(6, var(--base-unit, 150px));
@@ -162,7 +179,7 @@ export default {
   .boardColumn {
     .cell {
       display: flex;
-      background: var(--background-light, rgba(240, 240, 220, 0.8));
+      background: $col-default-var;
       width: var(--base-unit, 150px);
       height: var(--base-unit, 150px);
       border-radius: 10%;
@@ -175,98 +192,19 @@ export default {
         align-items: center;
         justify-content: center;
         border-radius: 50%;
-        background: #ddd;
-        opacity: 0.9;
-      }
-      &:hover {
-        background: rgba(220, 220, 220, 0.7);
-      }
-      &.topCell {
-        background: #fff !important;
-        &:hover {
-          border-radius: 50%;
-          background: var(--primary) !important;
-        }
-      }
-      &.topCell:hover ~ .cell {
-        background: #ddd;
-
-        &.color_1 {
-          border-radius: 5%;
-          background: rgba(23, 157, 247, 0.9);
-        }
-        &.color_2 {
-          border-radius: 50%;
-          background: rgba(#fccf1a, 0.9);
-        }
+        background: $col-default-var;
       }
     }
     .color_1 {
       .item {
-        background: rgb(23, 157, 247);
+        background: $color-player-1;
       }
     }
     .color_2 {
       .item {
-        background: rgba(#fccf1a, 0.9);
+        background: $color-player-2;
       }
     }
-
-    &:hover > *:not(:hover) {
-      background: rgba(220, 220, 220, 0.7);
-      .topCell {
-        background: #333;
-      }
-    }
-  }
-  .animated {
-    -webkit-animation-duration: 1s;
-    animation-duration: 1s;
-    -webkit-animation-fill-mode: both;
-    animation-fill-mode: both;
-  }
-
-  @keyframes bounceInDown {
-    from,
-    60%,
-    75%,
-    90%,
-    to {
-      -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
-      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
-    }
-
-    0% {
-      opacity: 0;
-      -webkit-transform: translate3d(0, -3000px, 0);
-      transform: translate3d(0, -3000px, 0);
-    }
-
-    60% {
-      opacity: 1;
-      -webkit-transform: translate3d(0, 25px, 0);
-      transform: translate3d(0, 25px, 0);
-    }
-
-    75% {
-      -webkit-transform: translate3d(0, -10px, 0);
-      transform: translate3d(0, -10px, 0);
-    }
-
-    90% {
-      -webkit-transform: translate3d(0, 5px, 0);
-      transform: translate3d(0, 5px, 0);
-    }
-
-    to {
-      -webkit-transform: translate3d(0, 0, 0);
-      transform: translate3d(0, 0, 0);
-    }
-  }
-
-  .bounceInDown {
-    -webkit-animation-name: bounceInDown;
-    animation-name: bounceInDown;
   }
 }
 </style>
