@@ -67,6 +67,7 @@ export default {
     },
     newGame() {
       this.$refs.TheGame.newGameAni()
+      this.$root.$el.style.setProperty('--primary', this.color[1])
       this.INIT_BOARD()
     },
     modHandler(e) {

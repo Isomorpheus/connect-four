@@ -100,7 +100,7 @@ export default {
         stagger: {
           amount: 0.5,
           from: 'center',
-          ease: 'power.easout',
+          ease: 'power4.in',
           grid: [7, 6]
         }
       })
@@ -125,8 +125,8 @@ export default {
       gsap.fromTo(
         collection,
         {
-          id: 'colid',
-          duration: 0.55,
+          id: 'colide',
+          duration: 0.65,
           background: 'rgba(240, 240, 240, 0.1)',
           stagger: {
             amount: 0.5,
