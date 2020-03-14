@@ -90,6 +90,9 @@ export default {
     },
     newGameAni() {
       const collection = this.$refs.cell_ref
+      gsap.set(collection, {
+        background: 'rgba(240, 240, 240, 0.8)'
+      })
       gsap.from(collection, {
         duration: 0.55,
         scale: 0.2,
@@ -107,7 +110,7 @@ export default {
       gsap.to(collection, {
         duration: 0.5,
         scale: 0.2,
-        opacity: 0,
+        opacity: 0.1,
         stagger: {
           amount: 0.5,
           from: 'center',
@@ -122,6 +125,7 @@ export default {
       gsap.fromTo(
         collection,
         {
+          id: 'colid',
           duration: 0.55,
           background: 'rgba(240, 240, 240, 0.1)',
           stagger: {
@@ -135,7 +139,6 @@ export default {
       )
     },
     highLightCol(event, c) {
-      console.log('h',event, c)
 
       const collection = document.querySelectorAll(`.col_${c} .cell`)
 
@@ -147,16 +150,22 @@ export default {
             background: 'rgba(240, 240, 240, 0.8)'
           },
           {
-            background: 'rgba(250, 250, 250, 0.9)'
+            background: 'rgba(255, 255, 255, 0.9)'
           }
         )
       }
 
       if (event === 'leave') {
-        gsap.to(collection, {
-          duration: 0.25,
-          background: 'rgba(240, 240, 240, 0.8)'
-        })
+        gsap.fromTo(
+          collection,
+          {
+            duration: 0.25,
+            background: 'rgba(255, 255, 255, 0.9)'
+          },
+          {
+            background: 'rgba(240, 240, 240, 0.8)'
+          }
+        )
       }
     }
   }
@@ -169,19 +178,24 @@ $col-default: rgba($base-color, 0.8);
 $col-default-var: var(--col-def, $col-default);
 $color-player-1: rgb(0, 177, 242);
 $color-player-2: rgb(252, 207, 26);
+$base-unit: 150px;
 
 .grid {
   display: grid;
   grid-gap: 1px;
-  grid-template-rows: repeat(6, var(--base-unit, 150px));
-  grid-template-columns: repeat(7, var(--base-unit, 150px));
+  grid-template-rows: calc(var(--base-unit, $base-unit) * 6);
+  grid-template-columns: repeat(7, var(--base-unit, $base-unit));
 
   .boardColumn {
+    display: grid;
+    grid-gap: 1px;
+    grid-template-rows: repeat(6, var(--base-unit, $base-unit));
+    grid-template-columns: var(--base-unit, $base-unit);
     .cell {
       display: flex;
       background: $col-default-var;
-      width: var(--base-unit, 150px);
-      height: var(--base-unit, 150px);
+      width: var(--base-unit, $base-unit);
+      height: var(--base-unit, $base-unit);
       border-radius: 10%;
       align-items: center;
       justify-content: center;
