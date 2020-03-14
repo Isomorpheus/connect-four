@@ -110,13 +110,26 @@ export default {
     },
     aninmatedCol(c) {
       const collection = document.querySelectorAll(`.col_${c} .cell`)
-      gsap.from(collection, {
-        duration: 0.45,
-        background: 'rgba(220, 220, 220, 0.2)',
-        stagger: {
-          amount: 0.5,
-          from: 'start'
+      gsap.fromTo(
+        collection,
+        {
+          duration: 0.45,
+          background: 'rgba(220, 220, 220, 0.2)',
+          stagger: {
+            amount: 0.5,
+            from: 'start'
+          }
+        },
+        {
+          background: 'rgba(200, 200, 200, 0.8)'
         }
+      )
+    },
+    highLightCol(c) {
+      const collection = document.querySelectorAll(`.col_${c} .cell`)
+      gsap.to(collection, {
+        duration: 0.25,
+        background: 'rgba(220, 220, 220, 0.9)'
       })
     }
   }
@@ -149,7 +162,7 @@ export default {
   .boardColumn {
     .cell {
       display: flex;
-      background: var(--background-light, rgba(240, 240, 20, 0.8));
+      background: var(--background-light, rgba(240, 240, 220, 0.8));
       width: var(--base-unit, 150px);
       height: var(--base-unit, 150px);
       border-radius: 10%;
