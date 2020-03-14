@@ -6,7 +6,9 @@
 
         <h1 v-if="winner === 2">You've lost this one</h1>
         <h1 v-else-if="winner === 0">Draw</h1>
-        <button class="button bouncy" @click="newGame">Play again</button>
+        <button class="button bouncy" @click="newGame">
+          Play again
+        </button>
       </div>
     </Modal>
     <TheGame
@@ -90,10 +92,20 @@ export default {
   --background-ultra-light: rgba(220, 220, 220, 0.8);
 }
 #app {
-  display: grid;
-  grid-template-rows: auto auto;
-  grid-template-columns: auto;
-  background: var(--pimary);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  background: var(--primary);
   font-family: 'Hepta Slab', 'Times New Roman', Times, serif;
+  transition: 1s;
+}
+body {
+  background: var(--primary);
+  transition: 1s;
+  padding: 0;
+  margin: 0;
 }
 </style>
