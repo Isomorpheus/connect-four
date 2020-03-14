@@ -24,7 +24,7 @@ import { mapState, mapActions } from 'vuex'
 import types from '@/store/typings'
 import TheGame from './components/TheGame.vue'
 import Modal from './components/Modal'
-import { SmartCheckWinStrategy } from './services'
+import { SmartCheckWinStrategy, sizes } from './services'
 
 export default {
   name: 'App',
@@ -35,6 +35,7 @@ export default {
   data: () => ({
     gameActive: false,
     modal: false,
+    tester: false,
     color: {
       0: 'rgba(240, 240, 240, 0.8)',
       1: 'rgb(0, 177, 242)',
@@ -46,6 +47,9 @@ export default {
     SmartCheckWinStrategy: () => SmartCheckWinStrategy
   },
   watch: {
+    '$screen.width'() {
+      this.resize()
+    },
     winner(w) {
       w !== 0 ? (this.modal = true) : (this.modal = false)
     },
@@ -58,8 +62,14 @@ export default {
       }
     }
   },
+  mounted() {
+    this.resize()
+  },
   methods: {
     ...mapActions([types.SET_GAMESTATE_TO_WIN, types.INIT_BOARD]),
+    resize() {
+      this.$root.$el.style.setProperty('--base-unit', sizes(this.$screen))
+    },
     setGameStatetoWin(w) {
       this.SET_GAMESTATE_TO_WIN(w)
       this.$root.$el.style.setProperty('--primary', this.color[w.player])
@@ -88,12 +98,13 @@ export default {
 :root {
   --primary: rgb(0, 177, 242);
   --secundary: rgb(252, 207, 26);
-  --base-unit: 100px;
+  --base-unit: 15vh;
 }
 #app {
   margin: 0;
   padding: 0;
   display: flex;
+  flex-direction: column;
   height: 100vh;
   justify-content: center;
   align-items: center;
