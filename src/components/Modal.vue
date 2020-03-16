@@ -10,10 +10,8 @@
     <transition name="pop" appear>
       <div v-if="showModalProp" class="modal" role="dialog">
         <p>
-          <span>G</span><span>A</span><span>M</span><span>E</span> <br /><span
-            >O</span
-          >
-          <span>V</span><span>E</span><span>R</span>
+          <span>G</span><span>A</span><span>M</span><span>E</span>&nbsp;
+          <span>O</span><span>V</span><span>E</span><span>R</span>
         </p>
         <slot></slot>
       </div>
@@ -33,6 +31,11 @@ export default {
   data() {
     return {
       showModal: false
+    }
+  },
+  computed: {
+    isMobile() {
+      return this.$screen.md
     }
   },
   watch: {
@@ -61,6 +64,7 @@ export default {
   width: fit-content;
   height: fit-content;
   max-width: 22em;
+  max-height: 40vh;
   padding: 2rem;
   border-radius: 1rem;
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
@@ -170,6 +174,7 @@ button:hover {
 }
 
 p {
+  margin-top: 2vh;
   font-family: 'Hepta Slab';
   font-size: 7vh;
   font-variation-settings: 'wght' 0;

@@ -1,8 +1,6 @@
 import { transpose, pipe, arrayReverse } from '../services/utils'
 
-const players = [1, 2]
-
-const strategy = rows => {
+const strategyWrapper = players => rows => {
   // transforms a row in the matrix, for generic check per player
   const transformRow = player => trRow =>
     trRow.map(p => (p === player ? 'x' : '-'))
@@ -85,5 +83,7 @@ const strategy = rows => {
 
   return winner(players) ? winner(players) : 0
 }
-
+// strategyWrapper is a partial with array of players as an argument
+// strategy can be a pure function with rows as an single argument
+const strategy = strategyWrapper([1, 2])
 export default strategy
