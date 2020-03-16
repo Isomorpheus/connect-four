@@ -1,6 +1,6 @@
 # exercise-connect-four
 
-> Please do not fork this repo in order to hide your solution from others.
+ [DEMO](https://connect-four.now.sh)
 
 ## Vue CLI
 
