@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
 import types from '@/store/typings'
 import { transpose, replaceAt } from '../services/utils'
 
@@ -55,14 +56,16 @@ export default new Vuex.Store({
   actions: {
     [types.GET_SERVER_MOVE]({ state, commit }) {
       commit(types.SET_IS_LOADING, true)
-
       if (state.gameState === 'play') {
-        fetch('/api/moves')
-          .then(res => res.json())
-          .then(json => {
+        console.log(state.board)
+        axios
+          .post('/api/moves', {
+            data: { board: state.board }
+          })
+          .then(res => {
             if (state.gameState === 'play') {
-              this.dispatch(types.PICK_TILE, json.column)
-            } 
+              this.dispatch(types.PICK_TILE, res.data.column)
+            }
 
             commit(types.SET_IS_LOADING, false)
           })
