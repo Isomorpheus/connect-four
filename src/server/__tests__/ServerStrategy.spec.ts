@@ -2,8 +2,12 @@ import {
   strategy,
   checkRowOnPattern,
   firstNumber,
+<<<<<<< HEAD
   patternMatching,
   // random
+=======
+  patternMatching
+>>>>>>> 6475a5f... Restrict to defence
 } from '../ServerStrategy'
 describe('Oponent strategy works', () => {
   it('outcome', () => {
@@ -24,9 +28,6 @@ describe('Oponent strategy works', () => {
 })
 
 describe('helpers', () => {
-  //it('random', () => {
-  //  expect(random).toBeLessThan(7)
-  //})
   it('checkRowOnPattern', () => {
     expect(checkRowOnPattern('0110202')('011')('isIndex')).toBe(0)
   })
