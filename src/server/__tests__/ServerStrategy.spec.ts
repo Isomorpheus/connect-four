@@ -2,7 +2,6 @@ import {
   strategy,
   checkRowOnPattern,
   firstNumber,
-  data,
   patternMatching
 } from '../ServerStrategy'
 describe('Oponent strategy works', () => {
@@ -22,12 +21,6 @@ describe('Oponent strategy works', () => {
     expect(strategy(combinations)).toEqual({ column: 2 })
   })
 })
-//describe('individual functions', () => {
-/// test('combinations', () => {
-//  const row = [0, 1, 2, 0, 1, 1, 2]
-// expect(checkRowForPlayerOne(1)(row)).toBe(true)
-//})
-//})
 
 describe('helpers', () => {
   it('checkRowOnPattern', () => {
@@ -77,12 +70,7 @@ describe('patternMatching', () => {
     expect(patternMatching('1121011')).toBe(4) //?.
   })
 
-  test('sample "1112220" should return "none"', () => {
-    expect(patternMatching('1122120')).toBe(6) //?.
-  })
   test('sample "1112221" should return "none"', () => {
     expect(patternMatching('1122121')).toBe('none')
-  }) //?.
-
-  // should return an index if match else a none
+  })
 })
