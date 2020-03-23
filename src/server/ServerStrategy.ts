@@ -4,7 +4,7 @@ export type data = {
 
 export const checkRowOnPattern = (row: string) => (pattern: string)  => (place: string = 'before') : number | string => {
   const placer:number = place === 'last' ? pattern.length - 1 : 0 
-  const column =  row.indexOf(pattern) + placer
+  const column = row.indexOf(pattern) + placer
   return row.indexOf(pattern) > -1 ? column : 'none'
 }
 
