@@ -6,7 +6,7 @@ export function makeServer() {
   const server = new Server({
     routes() {
       this.namespace = 'api'
-      this.timing = 10
+      this.timing = 1000
       this.get('/moves', () => {
         return { column: Math.floor(Math.random() * 7) }
       })

@@ -1,4 +1,5 @@
-import strategy from '../SmartCheckWinStrategy'
+import strategy, { checkConnections } from '../SmartCheckWinStrategy'
+// import { checkConnectionsForPlayerOne } from '../../server/ServerStrategy'
 
 /**
  * # Disclaimer
@@ -81,3 +82,25 @@ describe('Win strategies', () => {
     })
   })
 })
+
+describe('individual functions', () => {
+  test('checkConnections', () => {
+    const sampleArray = ['-', 'x', 'x', '-', 'x', '-', 'x']
+    const atLeastTwo = 'c'
+    expect(checkConnections(atLeastTwo)(sampleArray)).toBe(true) //?
+  })
+
+  test('checkConnections, with no connections', () => {
+    const sampleArray = ['-', 'x', '-', 'x', '-', 'x', '-']
+    const atLeastTwo = 'c'
+    expect(checkConnections(atLeastTwo)(sampleArray)).toBe(false) //?
+  })
+})
+
+/// describe('getIndexBeforeOrAfter', () => {
+///   test('checkConnectionsForPlayerOne', () => {
+///     const sampleArray = [0, 1, 2, 0, 1, 1, 0]
+///     const atLeastTwo = 1
+///     expect(checkConnectionsForPlayerOne(atLeastTwo)(sampleArray)).toBe(true) //?
+///   })
+/// })

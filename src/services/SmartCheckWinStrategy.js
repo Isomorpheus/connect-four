@@ -1,30 +1,30 @@
 import { transpose, pipe, arrayReverse } from '../services/utils'
 
-const strategyWrapper = players => rows => {
-  // transforms a row in the matrix, for generic check per player
-  const transformRow = player => trRow =>
-    trRow.map(p => (p === player ? 'x' : '-'))
+// transforms a row in the matrix, for generic check per player
+export const transformRow = player => trRow =>
+  trRow.map(p => (p === player ? 'x' : '-'))
 
+// generic predicate to check for n or more connections
+export const checkConnections = n => inputArray =>
+  inputArray
+    .reduce(
+      (connections, curr, i, array) => {
+        const item = i < array.length ? array[i + 1] : '-'
+        if (item === 'x' && curr === 'x') {
+          connections.push('c')
+        } else {
+          connections.push('-')
+        }
+        return connections
+      },
+      [0]
+    )
+    .join('')
+    .includes(n)
+
+const strategyWrapper = players => rows => {
   // playerboard per player
   const boardForPlayer = p => rows.map(row => transformRow(p)(row))
-
-  // generic predicate to check for n or more connections
-  const checkConnections = n => inputArray =>
-    inputArray
-      .reduce(
-        (connections, curr, i, array) => {
-          const item = i < array.length ? array[i + 1] : '-'
-          if (item === 'x' && curr === 'x') {
-            connections.push('c')
-          } else {
-            connections.push('-')
-          }
-          return connections
-        },
-        [0]
-      )
-      .join('')
-      .includes(n)
 
   // partial function for specific testing on 3 or more connections
   const threeConnections = checkConnections('ccc')
