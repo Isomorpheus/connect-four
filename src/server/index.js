@@ -12,7 +12,6 @@ export function makeServer() {
       })
 
       this.post('/moves', (schema, request) => {
-        console.log('test', request.requestBody)
         return strategy(request.requestBody)
       })
     }

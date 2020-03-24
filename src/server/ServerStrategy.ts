@@ -1,5 +1,3 @@
-import { transpose } from '@/services/utils'
-
 export const checkRowOnPattern = (row: string) => (pattern: string) => (
   position: string = 'before'
 ): number | string => {
@@ -27,10 +25,6 @@ export const patternMatching = (row: string): number | string => {
 
 export const strategy = (data: string): { column: number } => {
   const { board } = JSON.parse(data).data
-
-  const vrt = transpose(board)
-    .reverse()
-    .map((row: number[]) => patternMatching(row.join('')))
 
     const result: number[] = board.map((row: number[]) =>
       patternMatching(row.join(''))

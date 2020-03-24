@@ -57,7 +57,6 @@ export default new Vuex.Store({
     [types.GET_SERVER_MOVE]({ state, commit }) {
       commit(types.SET_IS_LOADING, true)
       if (state.gameState === 'play') {
-        console.log('state',state.board)
         axios
           .post('/api/moves', {
             data: { board: state.board }
