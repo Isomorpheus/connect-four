@@ -2,12 +2,7 @@ import {
   strategy,
   checkRowOnPattern,
   firstNumber,
-<<<<<<< HEAD
-  patternMatching,
-  // random
-=======
   patternMatching
->>>>>>> 6475a5f... Restrict to defence
 } from '../ServerStrategy'
 describe('Oponent strategy works', () => {
   it('outcome', () => {
