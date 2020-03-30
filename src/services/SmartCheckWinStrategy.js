@@ -40,11 +40,11 @@ const strategyWrapper = players => rows => {
 
   const allDiagonals = matrix => {
     const diagonalsStartingInTopRow = diagonals(matrix).slice(0, 4)
-    const diaonalsStartingAtFirstColumn = diagonals(transpose(matrix)).slice(
+    const diagonalsStartingAtFirstColumn = diagonals(transpose(matrix)).slice(
       1,
       3
     )
-    return diagonalsStartingInTopRow.concat(diaonalsStartingAtFirstColumn)
+    return diagonalsStartingInTopRow.concat(diagonalsStartingAtFirstColumn)
   }
 
   // test for winner functions
@@ -81,7 +81,7 @@ const strategyWrapper = players => rows => {
   const winner = players =>
     players.map(p => playerResults(p)).find(r => typeof r === 'number')
 
-  return winner(players) ? winner(players) : 0
+  return winner(players) ?? 0
 }
 // strategyWrapper is a partial with array of players as an argument
 // strategy can be a pure function with rows as an single argument
