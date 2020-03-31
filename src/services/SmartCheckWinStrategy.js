@@ -1,30 +1,30 @@
 import { transpose, pipe, arrayReverse } from '../services/utils'
 
-const strategyWrapper = players => rows => {
-  // transforms a row in the matrix, for generic check per player
-  const transformRow = player => trRow =>
-    trRow.map(p => (p === player ? 'x' : '-'))
+// transforms a row in the matrix, for generic check per player
+export const transformRow = player => trRow =>
+  trRow.map(p => (p === player ? 'x' : '-'))
 
+// generic predicate to check for n or more connections
+export const checkConnections = n => inputArray =>
+  inputArray
+    .reduce(
+      (connections, curr, i, array) => {
+        const item = i < array.length ? array[i + 1] : '-'
+        if (item === 'x' && curr === 'x') {
+          connections.push('c')
+        } else {
+          connections.push('-')
+        }
+        return connections
+      },
+      [0]
+    )
+    .join('')
+    .includes(n)
+
+const strategyWrapper = players => rows => {
   // playerboard per player
   const boardForPlayer = p => rows.map(row => transformRow(p)(row))
-
-  // generic predicate to check for n or more connections
-  const checkConnections = n => inputArray =>
-    inputArray
-      .reduce(
-        (connections, curr, i, array) => {
-          const item = i < array.length ? array[i + 1] : '-'
-          if (item === 'x' && curr === 'x') {
-            connections.push('c')
-          } else {
-            connections.push('-')
-          }
-          return connections
-        },
-        [0]
-      )
-      .join('')
-      .includes(n)
 
   // partial function for specific testing on 3 or more connections
   const threeConnections = checkConnections('ccc')
@@ -40,11 +40,11 @@ const strategyWrapper = players => rows => {
 
   const allDiagonals = matrix => {
     const diagonalsStartingInTopRow = diagonals(matrix).slice(0, 4)
-    const diaonalsStartingAtFirstColumn = diagonals(transpose(matrix)).slice(
+    const diagonalsStartingAtFirstColumn = diagonals(transpose(matrix)).slice(
       1,
       3
     )
-    return diagonalsStartingInTopRow.concat(diaonalsStartingAtFirstColumn)
+    return diagonalsStartingInTopRow.concat(diagonalsStartingAtFirstColumn)
   }
 
   // test for winner functions
@@ -81,7 +81,7 @@ const strategyWrapper = players => rows => {
   const winner = players =>
     players.map(p => playerResults(p)).find(r => typeof r === 'number')
 
-  return winner(players) ? winner(players) : 0
+  return winner(players) ?? 0
 }
 // strategyWrapper is a partial with array of players as an argument
 // strategy can be a pure function with rows as an single argument

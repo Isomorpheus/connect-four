@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@vue/babel-preset-app": "^4.2.3",
+    "axios": "^0.19.2",
     "core-js": "^3.6.4",
     "gsap": "^3.2.4",
     "vue": "^2.6.11",
@@ -38,6 +39,7 @@
     "prettier": "^1.19.1",
     "sass-loader": "^8.0.2",
     "typescript": "~3.7.5",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.11",
+    "wallaby-vue-compiler": "^1.0.6"
   }
 }
