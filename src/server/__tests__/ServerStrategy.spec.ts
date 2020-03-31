@@ -14,7 +14,7 @@ describe('Oponent strategy works', () => {
           [2, 1, 1, 1, 0, 2, 1],
           [0, 2, 2, 2, 1, 0, 1],
           [0, 0, 2, 0, 0, 0, 1],
-          [0, 0, 0, 1, 1, 1, 0]
+          [0, 0, 0, 1, 1, 1, 2]
         ]
       }
     })
@@ -72,5 +72,24 @@ describe('patternMatching', () => {
 
   test('sample "1112221" should return "none"', () => {
     expect(patternMatching('1122121')).toBe('none')
+  })
+
+})
+
+describe('vertical pattern matching', () => {
+  const combinations = JSON.stringify({
+    data: {
+      board: [
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1, 2],
+        [2, 1, 1, 0, 0, 2, 0],
+        [0, 2, 2, 1, 1, 0, 1],
+        [0, 0, 2, 1, 1, 0, 1],
+        [0, 0, 0, 1, 1, 1, 0]
+      ]
+    }
+  })
+  it('sample ', () => {
+    expect(strategy(combinations)).toEqual({ column: 3})
   })
 })
